@@ -1,32 +1,52 @@
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+'use client';
+
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
 
 export function HelpContent() {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [query, setQuery] = useState('');
+
+  const handleQuerySubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Here you can handle the query submission logic (e.g., sending to API)
+    console.log('Query submitted:', query);
+    setQuery(''); // Clear the input after submission
+    setIsDialogOpen(false); // Close the dialog
+  };
+
   return (
-    <Accordion>
-      <AccordionItem>
-        <AccordionTrigger>How do I add a new student?</AccordionTrigger>
-        <AccordionContent>
-          To add a new student, go to the Students page and click on the &quot;Add New Student&quot; button. Fill in the required information and click &quot;Save&quot; to create the new student record.
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem>
-        <AccordionTrigger>How can I view a student&apos;s progress?</AccordionTrigger>
-        <AccordionContent>
-          You can view a student&apos;s progress by clicking on their name in the Students table. This will take you to their individual profile page, where you can see their course progress, grades, and other relevant information.
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem>
-        <AccordionTrigger>How do I create a new chapter?</AccordionTrigger>
-        <AccordionContent>
-          To create a new chapter, navigate to the Chapters page and click on the &quot;Add New Chapter&quot; button. Fill in the chapter details such as name, subject, and grade level, then click &quot;Save&quot; to create the new chapter.
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem>
-        <AccordionTrigger>How can I generate reports?</AccordionTrigger>
-        <AccordionContent>
-          To generate reports, go to the Reports page. Here, you can select the type of report you want to generate, such as student performance or course completion rates. Choose the relevant filters and click &quot;Generate Report&quot; to create your desired report.
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
-  )
+    <div>
+      <h2 className="text-xl font-semibold">Help & Support</h2>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogTrigger asChild>
+          <Button className="mt-4 bg-gray-50 text-gray-900 hover:bg-gray-100">Ask for Help</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Submit a Query</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleQuerySubmit}>
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="query">Your Query</Label>
+                <Input
+                  id="query"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  required
+                />
+              </div>
+              <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white">
+                Submit
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
 }

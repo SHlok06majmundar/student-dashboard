@@ -68,10 +68,10 @@ export function StudentTable() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (editingStudentId) {
+    if (editingStudentId !== null) {
       // Update existing student
       setStudents((prev: Student[]) =>
-        prev.map((student: Student) => (student.id === editingStudentId ? { ...student, ...formData } : student))
+        prev.map((student: Student) => (student.id === editingStudentId ? { ...student, ...formData, id: student.id, dateJoined: student.dateJoined, lastLogin: student.lastLogin } : student))
       );
     } else {
       // Add new student
@@ -163,7 +163,7 @@ export function StudentTable() {
                     <option value="inactive">Inactive</option>
                   </select>
                 </div>
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white">
                   {editingStudentId ? 'Update Student' : 'Add Student'}
                 </Button>
               </div>
@@ -184,28 +184,27 @@ export function StudentTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {students.map((student) => (
+          {students.map(student => (
             <TableRow key={student.id}>
-              <TableCell>
-                <User className="mr-2" />
-                {student.name}
-              </TableCell>
+              <TableCell>{student.name}</TableCell>
               <TableCell>{student.cohort}</TableCell>
               <TableCell>
-                {student.courses.map((course) => (
-                  <div key={course.id}>{course.name}</div>
+                {student.courses.map(course => (
+                  <div key={course.id}>
+                    <span className="mr-2">{course.name}</span>
+                    <span className="text-sm text-gray-500">{course.type}</span>
+                  </div>
                 ))}
               </TableCell>
               <TableCell>{new Date(student.dateJoined).toLocaleDateString()}</TableCell>
               <TableCell>{new Date(student.lastLogin).toLocaleDateString()}</TableCell>
               <TableCell>
                 <span className={`inline-block w-2 h-2 rounded-full ${getStatusDotStyle(student.status)}`} />
-                {student.status}
+                {student.status.charAt(0).toUpperCase() + student.status.slice(1)}
               </TableCell>
               <TableCell>
-                <Button variant="outline" onClick={() => handleEditClick(student)}>
-                  <Edit className="mr-2" />
-                  Edit
+                <Button onClick={() => handleEditClick(student)}>
+                  <Edit className="w-4 h-4" />
                 </Button>
               </TableCell>
             </TableRow>
