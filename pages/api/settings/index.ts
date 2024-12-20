@@ -1,3 +1,4 @@
+// pages/api/settings/index.ts
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient } from '@prisma/client';
 
@@ -8,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       const settings = await prisma.settings.findFirst();
       res.status(200).json(settings);
-    } catch (error) {
+    } catch (error) { // eslint-disable-line @typescript-eslint/no-unused-vars
       console.error(error); // Log the error for debugging
       res.status(500).json({ message: 'Error fetching settings' });
     }
@@ -19,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         data: req.body,
       });
       res.status(200).json(settings);
-    } catch (error) {
+    } catch (error) { // eslint-disable-line @typescript-eslint/no-unused-vars
       console.error(error); // Log the error for debugging
       res.status(500).json({ message: 'Error updating settings' });
     }

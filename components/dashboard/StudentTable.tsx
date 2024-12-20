@@ -1,12 +1,10 @@
-'use client';
-
 import { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { BookOpen, User, Plus, Edit } from 'lucide-react';
+import { Plus, Edit } from 'lucide-react'; // Removed unused imports
 import useStore from '@/store/useStore';
 
 interface Course {
@@ -63,7 +61,7 @@ export function StudentTable() {
   useEffect(() => {
     // Initially set sample data
     setStudents(sampleStudents);
-  }, [setStudents]);
+  }, [setStudents]); // Add sampleStudents here if you need it as a dependency
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -147,7 +145,7 @@ export function StudentTable() {
                   <Input
                     id="cohort"
                     value={formData.cohort}
-                    onChange={(e) => setFormData({ ...formData, cohort: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, cohort: e.target.value })} // Ensure type is preserved
                     required
                   />
                 </div>
@@ -156,17 +154,17 @@ export function StudentTable() {
                   <select
                     id="status"
                     value={formData.status}
-                    onChange={(e) => setFormData({ ...formData, status: e.target.value as 'active' | 'inactive' })}
+                    onChange={(e) => setFormData({ ...formData, status: e.target.value as 'active' | 'inactive' })} // Ensure type is preserved
                     required
                   >
                     <option value="active">Active</option>
                     <option value="inactive">Inactive</option>
                   </select>
                 </div>
-                <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white">
-                  {editingStudentId ? 'Update Student' : 'Add Student'}
-                </Button>
               </div>
+              <Button type="submit" className="mt-4">
+                {editingStudentId ? 'Update Student' : 'Add Student'}
+              </Button>
             </form>
           </DialogContent>
         </Dialog>
@@ -176,34 +174,21 @@ export function StudentTable() {
           <TableRow>
             <TableHead>Name</TableHead>
             <TableHead>Cohort</TableHead>
-            <TableHead>Courses</TableHead>
-            <TableHead>Date Joined</TableHead>
-            <TableHead>Last Login</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {students.map(student => (
+          {students.map((student) => (
             <TableRow key={student.id}>
               <TableCell>{student.name}</TableCell>
               <TableCell>{student.cohort}</TableCell>
               <TableCell>
-                {student.courses.map(course => (
-                  <div key={course.id}>
-                    <span className="mr-2">{course.name}</span>
-                    <span className="text-sm text-gray-500">{course.type}</span>
-                  </div>
-                ))}
-              </TableCell>
-              <TableCell>{new Date(student.dateJoined).toLocaleDateString()}</TableCell>
-              <TableCell>{new Date(student.lastLogin).toLocaleDateString()}</TableCell>
-              <TableCell>
                 <span className={`inline-block w-2 h-2 rounded-full ${getStatusDotStyle(student.status)}`} />
-                {student.status.charAt(0).toUpperCase() + student.status.slice(1)}
+                {student.status}
               </TableCell>
               <TableCell>
-                <Button onClick={() => handleEditClick(student)}>
+                <Button onClick={() => handleEditClick(student)} variant="outline" className="text-blue-500">
                   <Edit className="w-4 h-4" />
                 </Button>
               </TableCell>

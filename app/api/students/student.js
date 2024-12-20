@@ -23,7 +23,7 @@ let students = [
   },
 ];
 
-export default function handler(req, res) {
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req;
 
   switch (method) {

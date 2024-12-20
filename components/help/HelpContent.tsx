@@ -20,7 +20,7 @@ export function HelpContent() {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold">Help & Support</h2>
+      <h2 className="text-xl font-semibold">Help &amp; Support</h2>
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
           <Button className="mt-4 bg-gray-50 text-gray-900 hover:bg-gray-100">Ask for Help</Button>
