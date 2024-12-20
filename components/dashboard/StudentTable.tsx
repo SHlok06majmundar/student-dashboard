@@ -16,19 +16,19 @@ interface Course {
 }
 
 interface Student {
-  id: number; // Assume `id` is a number for this example
+  id: number; // Ensure this matches your data model
   name: string;
   cohort: string;
   courses: Course[];
-  dateJoined: string;
-  lastLogin: string;
+  dateJoined: string; // ISO string for easier parsing
+  lastLogin: string; // ISO string for easier parsing
   status: 'active' | 'inactive';
 }
 
 interface StudentFormData {
   name: string;
   cohort: string;
-  courses: Course[];
+  courses: Course[]; // Ensure this matches your form structure
   status: 'active' | 'inactive';
 }
 
@@ -70,13 +70,13 @@ export function StudentTable() {
     
     if (editingStudentId) {
       // Update existing student
-      setStudents((prev) =>
-        prev.map((student) => (student.id === editingStudentId ? { ...student, ...formData } : student))
+      setStudents((prev: Student[]) =>
+        prev.map((student: Student) => (student.id === editingStudentId ? { ...student, ...formData } : student))
       );
     } else {
       // Add new student
       const newStudent: Student = {
-        id: Math.max(...students.map(s => s.id)) + 1, // Increment ID for new student
+        id: students.length > 0 ? Math.max(...students.map(s => s.id)) + 1 : 1, // Increment ID for new student
         ...formData,
         dateJoined: new Date().toISOString(),
         lastLogin: new Date().toISOString(),
@@ -138,7 +138,7 @@ export function StudentTable() {
                   <Input
                     id="name"
                     value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })} // Ensure type is preserved
                     required
                   />
                 </div>
@@ -163,9 +163,7 @@ export function StudentTable() {
                     <option value="inactive">Inactive</option>
                   </select>
                 </div>
-              </div>
-              <div className="mt-4">
-                <Button type="submit" className="bg-blue-500 text-white">
+                <Button type="submit" className="w-full">
                   {editingStudentId ? 'Update Student' : 'Add Student'}
                 </Button>
               </div>
@@ -176,32 +174,38 @@ export function StudentTable() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="font-medium">Name</TableHead>
-            <TableHead className="font-medium">Cohort</TableHead>
-            <TableHead className="font-medium">Courses</TableHead>
-            <TableHead className="font-medium">Date Joined</TableHead>
-            <TableHead className="font-medium">Last Login</TableHead>
-            <TableHead className="font-medium">Status</TableHead>
-            <TableHead className="font-medium">Actions</TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Cohort</TableHead>
+            <TableHead>Courses</TableHead>
+            <TableHead>Date Joined</TableHead>
+            <TableHead>Last Login</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {students.map((student) => (
             <TableRow key={student.id}>
-              <TableCell>{student.name}</TableCell>
+              <TableCell>
+                <User className="mr-2" />
+                {student.name}
+              </TableCell>
               <TableCell>{student.cohort}</TableCell>
-              <TableCell>{student.courses.map(course => course.name).join(', ')}</TableCell>
+              <TableCell>
+                {student.courses.map((course) => (
+                  <div key={course.id}>{course.name}</div>
+                ))}
+              </TableCell>
               <TableCell>{new Date(student.dateJoined).toLocaleDateString()}</TableCell>
               <TableCell>{new Date(student.lastLogin).toLocaleDateString()}</TableCell>
               <TableCell>
-                <div className="flex items-center">
-                  <span className={`w-2.5 h-2.5 rounded-full ${getStatusDotStyle(student.status)}`} />
-                  <span className="ml-2">{student.status}</span>
-                </div>
+                <span className={`inline-block w-2 h-2 rounded-full ${getStatusDotStyle(student.status)}`} />
+                {student.status}
               </TableCell>
               <TableCell>
                 <Button variant="outline" onClick={() => handleEditClick(student)}>
-                  <Edit className="w-4 h-4" />
+                  <Edit className="mr-2" />
+                  Edit
                 </Button>
               </TableCell>
             </TableRow>

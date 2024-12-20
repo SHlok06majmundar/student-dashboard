@@ -23,7 +23,7 @@ export function Header() {
         <Link href="/help" className="rounded-full p-2 hover:bg-gray-100">
           <HelpCircle className="h-5 w-5" />
         </Link>
-        <button className="rounded-full p-2 hover:bg-gray-100">
+        <button className="rounded-full p-2 hover:bg-gray-100" title="Notifications">
           <Bell className="h-5 w-5" />
         </button>
         <Link href="/settings" className="rounded-full p-2 hover:bg-gray-100">

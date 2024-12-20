@@ -1,28 +1,39 @@
+// pages/api/reports.ts
 import { NextApiRequest, NextApiResponse } from 'next'
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === 'GET') {
-    try {
+  try {
+    if (req.method === 'GET') {
       const reports = await prisma.report.findMany()
-      res.status(200).json(reports)
-    } catch (error) {
-      res.status(500).json({ message: 'Error fetching reports' })
-    }
-  } else if (req.method === 'POST') {
-    try {
+      return res.status(200).json(reports)
+    } else if (req.method === 'POST') {
+      const { title, content, authorId } = req.body;
+
+      // Validate incoming data
+      if (!title || !content || !authorId) {
+        return res.status(400).json({ message: 'All fields are required (title, content, authorId).' });
+      }
+
       const report = await prisma.report.create({
-        data: req.body,
+        data: {
+          title,
+          content,
+          authorId,
+        },
       })
-      res.status(201).json(report)
-    } catch (error) {
-      res.status(500).json({ message: 'Error creating report' })
+      return res.status(201).json(report)
+    } else {
+      res.setHeader('Allow', ['GET', 'POST'])
+      return res.status(405).json({ message: `Method ${req.method} Not Allowed` })
     }
-  } else {
-    res.setHeader('Allow', ['GET', 'POST'])
-    res.status(405).end(`Method ${req.method} Not Allowed`)
+  } catch (error) {
+    console.error('Error in API handler:', error);
+    return res.status(500).json({ message: 'Internal Server Error', error: error.message })
+  } finally {
+    // Close the Prisma Client connection when the API route is complete (optional)
+    await prisma.$disconnect();
   }
 }
-

@@ -33,15 +33,16 @@ export default function handler(req, res) {
     case 'POST':
       const { name, cohort, course } = req.body;
 
-      if (!name || !cohort || !course) {
-        return res.status(400).json({ message: 'All fields are required.' });
+      // Validate input
+      if (!name || !cohort || !course || typeof course !== 'string') {
+        return res.status(400).json({ message: 'All fields are required and course must be a string.' });
       }
 
       const newStudent = { 
         id: students.length + 1, 
         name, 
         cohort, 
-        courses: [{ id: new Date().getTime(), name: course, type: 'science' }],
+        courses: [{ id: Date.now(), name: course, type: 'science' }],
         dateJoined: new Date().toISOString(), 
         lastLogin: null, 
         status: 'active' 
