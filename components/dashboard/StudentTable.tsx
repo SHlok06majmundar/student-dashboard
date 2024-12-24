@@ -1,10 +1,12 @@
+"use client"; // Ensure this is the first line if needed
+
 import { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus, Edit } from 'lucide-react'; // Removed unused imports
+import { Plus, Edit } from 'lucide-react';
 import useStore from '@/store/useStore';
 
 interface Course {
